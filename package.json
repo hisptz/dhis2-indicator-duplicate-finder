@@ -1,0 +1,19 @@
+{
+  "name": "dhis2-indicactor-duplicate-finder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/chingalo/dhis2-indicactor-duplicate-finder.git"
+  },
+  "author": "Joseph Chingalo",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/chingalo/dhis2-indicactor-duplicate-finder/issues"
+  },
+  "homepage": "https://github.com/chingalo/dhis2-indicactor-duplicate-finder#readme"
+}
