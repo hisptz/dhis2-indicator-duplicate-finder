@@ -2,6 +2,19 @@ import _ from 'lodash';
 import moment from 'moment';
 
 export class AppUtil {
+  static getDataElementsFromExpression(expression: string) {
+    const dataElements: any = [];
+    const formulaPattern = /#\{.+?\}/g;
+    const expressionElements = expression.match(formulaPattern);
+    if (expressionElements) {
+      for (const expressionElement of expressionElements) {
+        const element = expressionElement.replace(/[#\{\}]/g, '');
+        dataElements.push(element.split('.')[0]);
+      }
+    }
+    return _.uniq(_.flattenDeep(dataElements)).sort();
+  }
+
   static getPaginationsFilters(response: any, pageSize: number = 25): string[] {
     const pagefilters: string[] = [];
     const pager = response.pager || {};
