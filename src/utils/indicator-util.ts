@@ -15,7 +15,23 @@ export class IndicatorUtil {
     this._baseUrl = baseUrl;
   }
 
-  async getAllIndicatorsByType(indicatorTypes: string[]) {
+  async getIndicatorTypesFromSystem(): Promise<IndicatorTypeModel[]> {
+    const indicatorTypes: any = [];
+    try {
+      const url = `${this._baseUrl}/api/indicatorTypes.json?fields=id,name&paging=false`;
+      const response: any = await HttpUtil.getHttp(this._headers, url);
+      indicatorTypes.push(response.indicatorTypes || []);
+    } catch (error: any) {
+      await new LogsUtil().addLogs(
+        'error',
+        error.message || error,
+        'getAllIndicatorsByType'
+      );
+    }
+    return indicatorTypes;
+  }
+
+  async getAllIndicatorsByIndicatorType(indicatorType: string) {
     const indicators: IndicatorModel[] = [];
     try {
       const indicatorTypesFilters = indicatorTypes.join(',');
