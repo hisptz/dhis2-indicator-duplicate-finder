@@ -39,7 +39,7 @@ export class AnalyticsUtil {
           dxArray
         );
         dataObjects = { ...dataObjects, ...formattedDataObject };
-        count ++;
+        count++;
       }
     } catch (error: any) {
       await new LogsUtil().addLogs(
