@@ -11,6 +11,8 @@ export class AppUtil {
         const element = expressionElement.replace(/[#\{\}]/g, '');
         dataElements.push(element.split('.')[0]);
       }
+    }else{
+      dataElements.push(expression);
     }
     return _.uniq(_.flattenDeep(dataElements)).sort();
   }
