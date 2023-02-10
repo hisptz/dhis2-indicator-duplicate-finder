@@ -1,6 +1,6 @@
-import { chunk, flattenDeep } from 'lodash';
+import { flattenDeep } from 'lodash';
 import { AppUtil, HttpUtil, LogsUtil } from '.';
-import { IndicatorModel } from '../models/indicator-model';
+import { IndicatorModel, IndicatorTypeModel } from '../models';
 
 export class IndicatorUtil {
   private _headers: {
@@ -34,10 +34,9 @@ export class IndicatorUtil {
   async getAllIndicatorsByIndicatorType(indicatorType: string) {
     const indicators: IndicatorModel[] = [];
     try {
-      const indicatorTypesFilters = indicatorTypes.join(',');
       const fields =
         'fields=id,name,indicatorType[id,name],numerator,denominator,indicatorGroups[name,id]';
-      const filteredUrl = `${this._baseUrl}/api/indicators.json?filter=indicatorType.id:in:[${indicatorTypesFilters}]`;
+      const filteredUrl = `${this._baseUrl}/api/indicators.json?filter=indicatorType.id:eq:${indicatorType}`;
       await new LogsUtil().addLogs(
         'info',
         `Discovering pagination for indicator list`,
