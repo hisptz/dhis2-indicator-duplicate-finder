@@ -1,4 +1,4 @@
-import { flattenDeep } from 'lodash';
+import { filter, flattenDeep } from 'lodash';
 import { AppUtil, HttpUtil, LogsUtil } from '.';
 import { IndicatorModel, IndicatorTypeModel } from '../models';
 
@@ -40,7 +40,7 @@ export class IndicatorUtil {
     const indicators: IndicatorModel[] = [];
     try {
       const fields =
-        'fields=id,name,indicatorType[id,name],numerator,denominator,indicatorGroups[name,id]';
+        'fields=id,name,indicatorType[id,name],numerator,denominator,indicatorGroups[name,id],publicAccess';
       const filteredUrl = `${this._baseUrl}/api/indicators.json?filter=indicatorType.id:eq:${indicatorType}`;
       await new LogsUtil().addLogs(
         'info',
@@ -76,6 +76,9 @@ export class IndicatorUtil {
         'getAllIndicatorsByType'
       );
     }
-    return flattenDeep(indicators);
+    return filter(
+      flattenDeep(indicators),
+      (indicator) => indicator.publicAccess !== '--------'
+    );
   }
 }

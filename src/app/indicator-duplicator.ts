@@ -114,7 +114,10 @@ export class IndicatorDuplicator {
         }
       }
       if (duplicateIndicators.length > 1) {
-        possibleDuplicateIndicators.push(duplicateIndicators);
+        possibleDuplicateIndicators.push([
+          ...duplicateIndicators,
+          { name: '' }
+        ]);
       }
     }
     return flattenDeep(possibleDuplicateIndicators);
