@@ -33,10 +33,12 @@ export class IndicatorDuplicator {
       );
       const possibleDuplicateIndicators =
         this._getPossibleDuplicateIndicators(formattedIndicators);
-      await this._generateExcelFile(
-        possibleDuplicateIndicators,
-        indicatorType.name
-      );
+      if (possibleDuplicateIndicators.length > 0) {
+        await this._generateExcelFile(
+          possibleDuplicateIndicators,
+          indicatorType.name
+        );
+      }
     } catch (error: any) {
       await new LogsUtil().addLogs(
         'error',
