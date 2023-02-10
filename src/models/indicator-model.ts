@@ -1,4 +1,3 @@
-// id,name,indicatorType[id,name],numerator,denominator,indicatorGroups[name,id]
 export interface IndicatorModel {
   id: string;
   name: string;
@@ -12,4 +11,5 @@ export interface IndicatorModel {
     id: string;
     name: string;
   }>;
+  value?: string;
 }
