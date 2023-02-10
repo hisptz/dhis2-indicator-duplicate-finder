@@ -74,12 +74,13 @@ export class AppProcess {
   private _getPossibleDuplicateIndicators(
     formattedIndicators: IndicatorModel[]
   ): IndicatorModel[] {
-    const possibleDuplicateIndicators: IndicatorModel[] = [];
+    const possibleDuplicateIndicators: any[] = [];
     const groupedIndicators = groupBy(
       formattedIndicators,
       (indicator) => indicator.value
     );
     for (const indicatorValue of keys(groupedIndicators)) {
+      const duplicateIndicators: any[] = []; 
       const indicators = groupedIndicators[indicatorValue] ?? [];
       if (indicators.length > 1) {
         const overallNumeratorExpression = join(
@@ -103,12 +104,15 @@ export class AppProcess {
             overallNumeratorExpression === numeratorExpression &&
             overallDenominatorExpression === denominatorExpression
           ) {
-            possibleDuplicateIndicators.push(indicator);
+            duplicateIndicators.push(indicator);
           }
         }
       }
+      if(duplicateIndicators.length > 1){
+        possibleDuplicateIndicators.push(duplicateIndicators);
+      }
     }
-    return sortBy(flattenDeep(possibleDuplicateIndicators), ['name']);
+    return flattenDeep(possibleDuplicateIndicators);
   }
 
   private async _getIndicatorWithValues() {
