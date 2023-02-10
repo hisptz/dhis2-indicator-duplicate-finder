@@ -1,10 +1,6 @@
 import { chunk, filter, findIndex, map, sum } from 'lodash';
 import { AppUtil, HttpUtil, LogsUtil } from '.';
-import {
-  DEFAULT_DX_COUNT,
-  DEFAULT_OUS,
-  DEFAULT_PERIODS
-} from '../constants/analytics-constant';
+import { DEFAULT_DX_COUNT, DEFAULT_OUS, DEFAULT_PERIODS } from '../constants';
 
 export class AnalyticsUtil {
   private _headers: {
