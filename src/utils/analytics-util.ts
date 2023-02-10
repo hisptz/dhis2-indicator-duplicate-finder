@@ -23,7 +23,14 @@ export class AnalyticsUtil {
     try {
       const pe = DEFAULT_PERIODS.join(';');
       const ou = DEFAULT_OUS.join(';');
+      const total = chunk(indicatorIds, DEFAULT_DX_COUNT).length;
+      let count = 1;
       for (const dxArray of chunk(indicatorIds, DEFAULT_DX_COUNT)) {
+        await new LogsUtil().addLogs(
+          'info',
+          `Discovering analytical data from server :: ${count}/${total}`,
+          'getAnalyticalDataFromServer'
+        );
         const dx = dxArray.join(';');
         const url = `${this._baseUrl}/api/29/analytics?dimension=pe:${pe}&filter=ou:${ou}&dimension=dx:${dx}`;
         const response: any = await HttpUtil.getHttp(this._headers, url);
