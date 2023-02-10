@@ -1,8 +1,14 @@
-import _, { flattenDeep, groupBy, keys, sortBy } from 'lodash';
+import _, { flattenDeep, groupBy, join, keys, map, sortBy } from 'lodash';
 import { appConfig } from '../configs';
 import { INDICATOR_TYPES } from '../constants/indicator-constant';
 import { IndicatorModel } from '../models/indicator-model';
-import { AnalyticsUtil, AppUtil, IndicatorUtil, LogsUtil } from '../utils';
+import {
+  AnalyticsUtil,
+  AppUtil,
+  ExcelUtil,
+  IndicatorUtil,
+  LogsUtil
+} from '../utils';
 
 export class AppProcess {
   private _analyticsUtil: AnalyticsUtil;
@@ -26,7 +32,7 @@ export class AppProcess {
       const formattedIndicators = await this._getIndicatorWithValues();
       const possibleDuplicateIndicators =
         this._getPossibleDuplicateIndicators(formattedIndicators);
-      console.log(possibleDuplicateIndicators);
+      await this._generateExcelFile(possibleDuplicateIndicators);
     } catch (error: any) {
       await new LogsUtil().addLogs(
         'error',
@@ -34,6 +40,35 @@ export class AppProcess {
         'startProcess'
       );
     }
+  }
+
+  private async _generateExcelFile(
+    possibleDuplicateIndicators: IndicatorModel[]
+  ) {
+    const jsonData = flattenDeep(
+      map(possibleDuplicateIndicators, (indicator) => {
+        return {
+          id: indicator.id,
+          name: indicator.name,
+          indicatorType: indicator.indicatorType?.name,
+          value: indicator.value ?? '',
+          indicatorGroups: join(
+            flattenDeep(
+              map(
+                indicator.indicatorGroups || [],
+                (indicatorGroup) => indicatorGroup.name || ''
+              )
+            ).sort(),
+            ', '
+          )
+        };
+      })
+    );
+    await new ExcelUtil('possible-duplicate').writeToSingleSheetExcelFile(
+      jsonData,
+      false,
+      'indicator-list'
+    );
   }
 
   private _getPossibleDuplicateIndicators(
@@ -47,21 +82,23 @@ export class AppProcess {
     for (const indicatorValue of keys(groupedIndicators)) {
       const indicators = groupedIndicators[indicatorValue] ?? [];
       if (indicators.length > 1) {
-        const overallNumeratorExpression =
-          AppUtil.getDataElementsFromExpression(indicators[0].numerator).join(
-            '_'
-          );
-        const overallDenominatorExpression =
-          AppUtil.getDataElementsFromExpression(indicators[0].denominator).join(
-            '_'
-          );
+        const overallNumeratorExpression = join(
+          AppUtil.getDataElementsFromExpression(indicators[0].numerator),
+          '_'
+        );
+        const overallDenominatorExpression = join(
+          AppUtil.getDataElementsFromExpression(indicators[0].denominator),
+          '_'
+        );
         for (const indicator of indicators) {
-          const numeratorExpression = AppUtil.getDataElementsFromExpression(
-            indicator.numerator
-          ).join('_');
-          const denominatorExpression = AppUtil.getDataElementsFromExpression(
-            indicator.denominator
-          ).join('_');
+          const numeratorExpression = join(
+            AppUtil.getDataElementsFromExpression(indicator.numerator),
+            '_'
+          );
+          const denominatorExpression = join(
+            AppUtil.getDataElementsFromExpression(indicator.denominator),
+            '_'
+          );
           if (
             overallNumeratorExpression === numeratorExpression &&
             overallDenominatorExpression === denominatorExpression
