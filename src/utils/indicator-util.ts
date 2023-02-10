@@ -18,6 +18,11 @@ export class IndicatorUtil {
   async getIndicatorTypesFromSystem(): Promise<IndicatorTypeModel[]> {
     const indicatorTypes: any = [];
     try {
+      await new LogsUtil().addLogs(
+        'info',
+        `Discovering indicator type list`,
+        'getAllIndicatorsByType'
+      );
       const url = `${this._baseUrl}/api/indicatorTypes.json?fields=id,name&paging=false`;
       const response: any = await HttpUtil.getHttp(this._headers, url);
       indicatorTypes.push(response.indicatorTypes || []);
@@ -28,7 +33,7 @@ export class IndicatorUtil {
         'getAllIndicatorsByType'
       );
     }
-    return indicatorTypes;
+    return flattenDeep(indicatorTypes);
   }
 
   async getAllIndicatorsByIndicatorType(indicatorType: string) {
