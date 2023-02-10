@@ -21,7 +21,7 @@ export class AppProcess {
         await this._indicatorUtil.getIndicatorTypesFromSystem();
       for (const indicatorType of indicatorTypes) {
         await new LogsUtil().addLogs(
-          'error',
+          'info',
           `Start process of determine possible indicator with '${indicatorType.name}' as indicator type`,
           'startProcess'
         );
