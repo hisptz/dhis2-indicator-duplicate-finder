@@ -1,9 +1,9 @@
 import { AppConfigModel, EmailConfigModel } from '../models';
 
 export const appConfig: AppConfigModel = {
-  username: 'scriptrunner',
-  password: 'Script@123',
-  baseUrl: 'https://lsis-ovc-dreams.org'
+  username: 'chingalo',
+  password: 'Joseph@111987',
+  baseUrl: 'https://dhis.moh.go.tz'
 };
 
 export const emailConfig: EmailConfigModel = {

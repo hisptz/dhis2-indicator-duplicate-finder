@@ -1,13 +1,34 @@
-import _ from 'lodash';
-import { LogsUtil } from '../utils';
+import { appConfig } from '../configs';
+import { IndicatorUtil, LogsUtil } from '../utils';
+import { IndicatorDuplicator } from '.';
 
 export class AppProcess {
-  constructor() {}
+  private _indicatorUtil: IndicatorUtil;
+  private _indicatorDuplicator: IndicatorDuplicator;
+
+  constructor() {
+    this._indicatorUtil = new IndicatorUtil(
+      appConfig.username,
+      appConfig.password,
+      appConfig.baseUrl
+    );
+    this._indicatorDuplicator = new IndicatorDuplicator();
+  }
 
   async startProcess() {
     try {
-      // TODO logics for data
-      console.log('Todo handle logics for the script');
+      const indicatorTypes =
+        await this._indicatorUtil.getIndicatorTypesFromSystem();
+      for (const indicatorType of indicatorTypes) {
+        await new LogsUtil().addLogs(
+          'info',
+          `Start process of determine possible indicator with '${indicatorType.name}' as indicator type`,
+          'startProcess'
+        );
+        await this._indicatorDuplicator.startProcessByIndicatorType(
+          indicatorType
+        );
+      }
     } catch (error: any) {
       await new LogsUtil().addLogs(
         'error',
