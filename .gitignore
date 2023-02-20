@@ -3,4 +3,4 @@
 dist
 resources
 node_modules
-src/configs/config.ts
+src/configs/app-config.ts

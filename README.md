@@ -1,3 +1,1 @@
-# click-app-report
-
-report generator for click up tasks
+# DHIS2 Indicator Duplicate finder
